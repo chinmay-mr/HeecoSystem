@@ -4,13 +4,13 @@ from Users.models import Guardian,Doctor,Nurse
 class Patients(models.Model):
     name=models.CharField()
     condition=models.CharField()
-    condition_descriotion=models.TextField()
+    condition_description=models.TextField()
     process=models.TextField(null=True,blank=True)
-    admission_date=models.DateTimeField()
+    admission_date=models.DateTimeField(auto_now_add=True)
     discharge_date=models.DateTimeField(blank=True,null=True)
 
     guardian=models.OneToOneField(Guardian,on_delete=models.DO_NOTHING,null=True,related_name="patient")
-    doctor_assigned=models.OneToOneField(Doctor,on_delete=models.DO_NOTHING,related_name="patient")
+    doctor_assigned=models.OneToOneField(Doctor,on_delete=models.DO_NOTHING,null=True,related_name="patient") #change it doctor assigning
 
     def __str__(self):
         return self.name
