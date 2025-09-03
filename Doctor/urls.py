@@ -1,9 +1,10 @@
 from django.contrib import admin
 from django.urls import path
-from .views import PatientCreateAPIView,PatientRetrieveUpdateView
+from .views import PatientCreateAPIView,PatientRetrieveUpdateView,TaskCreateAPIView
 urlpatterns = [
     path('patients/',PatientCreateAPIView.as_view(),name='ListCreate-patients'),
-    path('patients/<int:pk>/',PatientRetrieveUpdateView.as_view(),name='retrieveUpdate-patients'),
+    path('patients/<int:id>/',PatientRetrieveUpdateView.as_view(),name='retrieveUpdate-patients'),
+    path('patients/<int:patient_id>/tasks/',TaskCreateAPIView.as_view(),name='create-list-tasks'),
 
 
 ]

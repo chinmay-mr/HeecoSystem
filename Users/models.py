@@ -19,19 +19,20 @@ class Nurse(models.Model):
         DAY_SHIFT='dayshift','Dayshift'
         NIGHT_SHIFT='nightshift','Nightshift'
         
-
-    nurse=models.ForeignKey(User,on_delete=models.CASCADE,related_name="nurse")
+    
+    name=models.CharField(default="")
     shift=models.CharField(choices=Shift.choices,default=Shift.DAY_SHIFT)
     # patients
 
     def __str__(self):
-        return f"{nurse.first_name}"
+        return f"{self.name}"
 
 class Guardian(models.Model):
-    guardian=models.ForeignKey(User,on_delete=models.CASCADE,related_name="guardian")
+    name=models.CharField(default="")
+    phone_number=models.CharField(unique=True,default="Not Filled")
     relation_type=models.CharField()
 
     # patient
     
     def __str__(self):
-        return f"{guardian.first_name}"
+        return f"{name} {relation_type}"

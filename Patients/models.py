@@ -44,16 +44,25 @@ class Vitals(models.Model):
 class Tasks(models.Model):
     class Status(models.TextChoices):
         PENDING='pending'
-        IN_PROGRESS='in_progress'
         COMPLETED='completed'
-    patient=models.OneToOneField(Patients,on_delete=models.CASCADE,related_name="tasks")
+    patient=models.ForeignKey(Patients,on_delete=models.CASCADE,related_name="tasks")
     task_type=models.TextField()
     task=models.TextField()
-    assigned_to=models.OneToOneField(Nurse,on_delete=models.DO_NOTHING,related_name='tasks')
+    assigned_to=models.ForeignKey(Nurse,null=True,on_delete=models.DO_NOTHING,related_name="tasks")
     status=models.CharField(choices=Status.choices,default=Status.PENDING)
-    assigned_time=models.DateTimeField()
-    due_time=models.DateTimeField()
-    comleted_time=models.DateTimeField()
+    assigned_time=models.DateField(auto_now_add=True)
+    due_time=models.DateField()
+    completed_time=models.DateField(null=True,blank=True)
+
+    def save(self,*args,**kwargs):
+
+        if self.status=='completed' and self.comleted_time is None:
+            self.comleted_time=timezone.now()
+
+        if self.status=='pending':
+            self.comleted_time=None
+        
+        super().save(*args, **kwargs)
         
     def __str__(self):
         return f"{patient.name} due:{due_time} status:{status}"
