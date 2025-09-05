@@ -18,24 +18,24 @@ class Patients(models.Model):
 
 class GeneralDetail(models.Model):
     patient=models.OneToOneField(Patients,on_delete=models.CASCADE,related_name='general_details')
-    blood_group=models.CharField()
-    age=models.PositiveIntegerField()
-    medical_history=models.TextField()
+    age=models.PositiveIntegerField(null=True,blank=True)
+    blood_group=models.CharField(null=True,blank=True)
+    medical_history=models.TextField(null=True,blank=True)
 
-    floor_no=models.CharField()
-    bed_no=models.CharField()
+    floor_no=models.CharField(null=True,blank=True)
+    bed_no=models.CharField(null=True,blank=True)
 
     def __str__(self):
         return f"{self.patient.name} - floor {floor_no} bed {bed_no}"
 
 class Vitals(models.Model):
-    patient=models.OneToOneField(Patients,on_delete=models.CASCADE,related_name="vitals")
+    patient=models.ForeignKey(Patients,on_delete=models.CASCADE,related_name="vitals")
     temperature=models.FloatField()
     heart_rate=models.IntegerField()
     respiratory_rate=models.IntegerField()
     oxygen_saturation=models.IntegerField()
-    check_time=models.DateTimeField()
-    checked_by=models.OneToOneField(Nurse,on_delete=models.DO_NOTHING,related_name='patient_vitals')
+    check_time=models.DateTimeField(auto_now_add=True)
+    checked_by=models.ForeignKey(Nurse,on_delete=models.DO_NOTHING,related_name='patient_vitals')
     remarks=models.TextField()
 
     def __str__(self):

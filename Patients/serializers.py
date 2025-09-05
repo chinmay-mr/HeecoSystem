@@ -1,8 +1,8 @@
 from django.shortcuts import get_object_or_404
 from rest_framework import serializers
-from .models import Patients,Tasks
+from .models import Patients,Tasks,Vitals
 from Users.models import Guardian
-from Users.serializers import GuardianSerializer
+from Users.serializers import GuardianSerializer,NurseSerializer
 
 
 
@@ -21,6 +21,10 @@ class PatientSerializer(serializers.ModelSerializer):
         patient = Patients.objects.create(guardian=guardian, **validated_data)
         return patient
 
+class AbstractPatientSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=Patients
+        fields=['id','name','condition','guardian','doctor_assigned']
 
 class TaskSerializer(serializers.ModelSerializer):
     
@@ -32,4 +36,10 @@ class TaskSerializer(serializers.ModelSerializer):
         read_only_fields=['patient']
 
 
-    
+class VitalSerializer(serializers.ModelSerializer):
+    patient=AbstractPatientSerializer(read_only=True)
+    # checked_by=NurseSerializer() # need to verify with user
+    class Meta:
+        model=Vitals
+        fields=['id','patient','temperature','heart_rate','respiratory_rate','oxygen_saturation','remarks','check_time','checked_by']
+        read_only_fields=['check_time']

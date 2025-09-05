@@ -16,6 +16,7 @@ class PatientRetrieveUpdateView(generics.RetrieveUpdateAPIView):
     lookup_field='id'
 
 
+
 # creating tasks to specific patients
 class TaskCreateAPIView(generics.ListCreateAPIView):
     
@@ -30,6 +31,7 @@ class TaskCreateAPIView(generics.ListCreateAPIView):
         serializer.save(patient=patient)
 
 
+
 # Update Delete Retrive specific task of a patient
 class TaskModifyAPIView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class=TaskSerializer
@@ -38,7 +40,8 @@ class TaskModifyAPIView(generics.RetrieveUpdateDestroyAPIView):
     def get_queryset(self):
         tasks_of_specific_patient=Tasks.objects.filter(patient=self.kwargs['patient_id'])
         return tasks_of_specific_patient
-    
+
+
 
 
 
