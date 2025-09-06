@@ -28,7 +28,7 @@ class AbstractPatientSerializer(serializers.ModelSerializer):
 
 class TaskSerializer(serializers.ModelSerializer):
     
-    patient=PatientSerializer(read_only=True)
+    patient=AbstractPatientSerializer(read_only=True)
     
     class Meta:
         model=Tasks

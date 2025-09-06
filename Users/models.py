@@ -20,7 +20,7 @@ class Nurse(models.Model):
         NIGHT_SHIFT='nightshift','Nightshift'
         
     
-    name=models.CharField(default="")
+    nurse=models.ForeignKey(User,on_delete=models.CASCADE,related_name="nurse")
     shift=models.CharField(choices=Shift.choices,default=Shift.DAY_SHIFT)
     # patients
 
