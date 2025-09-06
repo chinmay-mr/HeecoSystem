@@ -10,7 +10,7 @@ class Patients(models.Model):
     discharge_date=models.DateTimeField(blank=True,null=True)
 
     guardian=models.OneToOneField(Guardian,on_delete=models.DO_NOTHING,null=True,related_name="patient")
-    doctor_assigned=models.OneToOneField(Doctor,on_delete=models.DO_NOTHING,null=True,related_name="patient") #change it doctor assigning
+    doctor_assigned=models.ForeignKey(Doctor,on_delete=models.DO_NOTHING,null=True,related_name="patient") #change it doctor assigning
 
     def __str__(self):
         return self.name

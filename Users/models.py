@@ -9,7 +9,7 @@ class Doctor(models.Model):
     # patients
 
     def __str__(self):
-        return f"{doctor.first_name}"
+        return f"{self.doctor}"
         
     
 
@@ -20,12 +20,12 @@ class Nurse(models.Model):
         NIGHT_SHIFT='nightshift','Nightshift'
         
     
-    nurse=models.ForeignKey(User,on_delete=models.CASCADE,related_name="nurse")
+    nurse=models.ForeignKey(User,on_delete=models.CASCADE,related_name="nurse",default="")
     shift=models.CharField(choices=Shift.choices,default=Shift.DAY_SHIFT)
     # patients
 
     def __str__(self):
-        return f"{self.name}"
+        return f"{self.nurse}"
 
 class Guardian(models.Model):
     name=models.CharField(default="")

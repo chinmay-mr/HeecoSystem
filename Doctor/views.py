@@ -2,19 +2,33 @@ from django.shortcuts import render,get_object_or_404
 from rest_framework import generics
 from Patients.models import Patients,Tasks
 from Patients.serializers import PatientSerializer,TaskSerializer
-
+from Users.permissions import IsDoctor
+from Users.models import Doctor
 
 # View to create patient 
 class PatientCreateAPIView(generics.ListCreateAPIView):
+    permission_classes=[IsDoctor]
     queryset=Patients.objects.all()
     serializer_class=PatientSerializer
 
 # View to update Delete Retrieve specific patient
 class PatientRetrieveUpdateView(generics.RetrieveUpdateAPIView):
-    queryset=Patients.objects.all()
+    permission_classes=[IsDoctor]
+    
     serializer_class=PatientSerializer
     lookup_field='id'
 
+    def get_queryset(self):
+        user=self.request.user
+
+        try:
+            doctor=Doctor.objects.get(doctor=user)
+        except  Doctor.DoesNotExist:
+            return Patients.objects.none()
+
+        return Patients.objects.filter(doctor_assigned=doctor)
+        
+    
 
 
 # creating tasks to specific patients

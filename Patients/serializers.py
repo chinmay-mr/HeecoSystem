@@ -1,7 +1,7 @@
 from django.shortcuts import get_object_or_404
 from rest_framework import serializers
 from .models import Patients,Tasks,Vitals
-from Users.models import Guardian
+from Users.models import Guardian,Doctor,Nurse
 from Users.serializers import GuardianSerializer,NurseSerializer
 
 
@@ -13,12 +13,15 @@ class PatientSerializer(serializers.ModelSerializer):
     class Meta:
         model=Patients
         fields=['id','name','condition','condition_description','admission_date','discharge_date','guardian','doctor_assigned']
-        read_only_fields = ['id','admission_date']
+        read_only_fields = ['id','admission_date','doctor_assigned']
     
     def create(self, validated_data):
+        request = self.context['request']
+        doctor = Doctor.objects.get(doctor=request.user)
+    
         guardian_data = validated_data.pop('guardian')
         guardian, created = Guardian.objects.get_or_create(**guardian_data)
-        patient = Patients.objects.create(guardian=guardian, **validated_data)
+        patient = Patients.objects.create(guardian=guardian,doctor_assigned=doctor ,**validated_data)
         return patient
 
 class AbstractPatientSerializer(serializers.ModelSerializer):

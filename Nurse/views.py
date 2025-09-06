@@ -8,7 +8,7 @@ from rest_framework import generics
 #vital api view to note vitals
 class VitalsAPIView(generics.ListCreateAPIView):
     serializer_class=VitalSerializer
-    
+    # permission_classes=[]
     def get_queryset(self):
         patient_id=self.kwargs['patient_id']
         return Vitals.objects.filter(patient_id=patient_id)
