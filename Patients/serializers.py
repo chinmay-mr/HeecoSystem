@@ -24,6 +24,34 @@ class PatientSerializer(serializers.ModelSerializer):
         patient = Patients.objects.create(guardian=guardian,doctor_assigned=doctor ,**validated_data)
         return patient
 
+    def update(self, instance, validated_data):
+    # Pop nested guardian data if provided
+        guardian_data = validated_data.pop('guardian', None)
+
+        # Update top-level patient fields
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+        instance.save()
+
+        # Only try to update guardian if guardian data was provided
+        if guardian_data is not None:
+            # Try to get the current guardian
+            guardian = getattr(instance, 'guardian', None)
+
+            if guardian:
+                # Update existing guardian
+                for attr, value in guardian_data.items():
+                    setattr(guardian, attr, value)
+                guardian.save()
+            else:
+                # Create new guardian and assign to patient
+                guardian = Guardian.objects.create(**guardian_data)
+                instance.guardian = guardian
+                instance.save()
+
+        return instance
+
+
 class AbstractPatientSerializer(serializers.ModelSerializer):
     class Meta:
         model=Patients
@@ -37,6 +65,7 @@ class TaskSerializer(serializers.ModelSerializer):
         model=Tasks
         fields=['id','patient','task_type','task','assigned_to','status','due_time','completed_time']
         read_only_fields=['patient']
+        
 
 
 class VitalSerializer(serializers.ModelSerializer):

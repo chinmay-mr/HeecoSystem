@@ -9,7 +9,7 @@ class Doctor(models.Model):
     # patients
 
     def __str__(self):
-        return f"{self.doctor}"
+        return f"{self.doctor.id}"
         
     
 
@@ -28,8 +28,8 @@ class Nurse(models.Model):
         return f"{self.nurse}"
 
 class Guardian(models.Model):
-    name=models.CharField(default="")
-    phone_number=models.CharField(unique=True,default="Not Filled")
+    name=models.CharField(null=True,blank=True)
+    phone_number=models.CharField(unique=True,null=True,blank=True,default="Not Filled")
     relation_type=models.CharField()
 
     # patient
